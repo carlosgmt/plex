@@ -11,5 +11,5 @@ services:
       - VERSION=docker
     volumes:
       - /dockermounts/plex:/config
-      - /library:/library
+      - /media/Media-Server:/library/disk1
     restart: unless-stopped
