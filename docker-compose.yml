@@ -12,4 +12,5 @@ services:
     volumes:
       - /dockermounts/plex:/config
       - /media/Media-Server:/library/disk1
+      - /media/Video:/library/video
     restart: unless-stopped
