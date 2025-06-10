@@ -1,16 +1,31 @@
-version: "2.1"
 services:
   plex:
-    image: lscr.io/linuxserver/plex:latest
+    # Using the official Plex image from plexinc
+    image: plexinc/pms-docker:latest
     container_name: plex
     network_mode: host
     environment:
-      - PUID=1003
-      - PGID=1004
-      - TZ=CH
-      - VERSION=docker
+      # Using the more specific "Europe/Zurich" is best practice for your location
+      - TZ=Europe/Zurich
+      # The official image uses PLEX_UID and PLEX_GID
+      - PLEX_UID=1003
+      - PLEX_GID=1004
+      # IMPORTANT: You must get a new claim token for the initial setup.
+      # This links the new server to your account.
+      # You can remove this line after the first successful run.
+      - PLEX_CLAIM=claim-PFxbBkw--JH-ikxFRMEA
+    # This section enables NVIDIA GPU hardware transcoding and is the current recommended method.
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all # or specify a GPU ID, e.g., 'device=0'
+              capabilities: [gpu]
     volumes:
+      # Your volume mappings remain unchanged as requested
       - /dockermounts/plex:/config
       - /media/Media-Server:/library/disk1
       - /media/Video:/library/video
+    # Restart policy remains the same
     restart: unless-stopped
